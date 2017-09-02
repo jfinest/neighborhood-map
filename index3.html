@@ -4,11 +4,11 @@
 
     <meta charset="UTF-8">
     <title>My Neighborhood Map</title>
-    <script src="node_modules/jquery/dist/jquery.js"> </script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 
   </head>
+
   <body>
     <div class="contain">
       <div class="well well-sm">
@@ -18,34 +18,88 @@
 
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">Filter</span>
-          <input id="filter-places" type="text" value="" placeholder="Ex: Walmart" >
+          <input id="filter-places" data-bind="textInput: searchCriteria, event: { input: enableDetails}" type="text" value="" placeholder="Ex: Walmart" >
         </div>
 
         <hr>
 
         <div>
-          <ul class="list-group" id="listing">
+          <ul class="list-group" data-bind="foreach: listings">
+              <li data-bind="event: {click: $parent.loadArticles}, visible: showHideListings($data.title, $data.index)" data-type="listing" class="list-group-item" >
+                  <span data-bind="text: $data.title"></span>
+                  <span class="hidden" data-type="marker-index" data-bind="text: $data.index"></span>
+                  
+              </li>
           </ul>
         </div>
 
-        <div class="nytimes-container">
+        <div class="nytimes-container" >
           <h4 id="nytimes-header">New York Times Articles</h4>
-          <ul id="nytimes-articles" class="article-list"></ul>
+          <ul data-bind="foreach: articles">
+              <li class="article" data-type="articles" >
+                  <a data-bind="attr: { href: $data.web_url"><span data-bind="text: $data.headline.main"></span></a>
+              </li>
+          </ul>
         </div>
-
       </div>
 
       <div id="map"></div>
-
     </div>
 
-<!--Loading the JS API ASYNCHRONOUSLY.-->
+<!--Loading the JS Sources -->
+    <script src="node_modules/jquery/dist/jquery.js"> </script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"> </script>
     <script src="js/script.js"></script>
     <script src="js/event.js"></script>
-   <script async defer
+    <script async
         src=
-        "https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyB5nHt7MaXWaKiPWtQ5D2ZAoUvoNlWIEI8&v=3&callback=initMap">
+        "https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyB5nHt7MaXWaKiPWtQ5D2ZAoUvoNlWIEI8&v=3&callback=initMap" onerror="googleApisError()">
     </script>
-    
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+    <script>
+
+      ko.options.deferUpdates = true;
+
+      function MyViewModel() {
+        var self = this;
+        self.listings = ko.observableArray(getLocations());
+        self.articles = ko.observableArray();
+
+        self.loadArticles = function(listing) {
+          loadData(listing.title).done(function(data2) {
+          self.articles(data2);
+          }); 
+        };
+
+        self.searchCriteria = ko.observable("");
+        self.detailsEnabled = ko.observable();
+        show = ko.observable(true);
+                 
+        enableDetails = function() {
+
+        };
+      };
+
+      var myModel = new MyViewModel();
+
+      ko.applyBindings(myModel);
+
+      function showHideListings(listingTitle, listingIndex){
+              
+        var title = listingTitle.trim().toLowerCase();
+        var search = myModel.searchCriteria().trim().toLowerCase();
+
+        if ( search === "" ){
+          $('body').trigger($.Event("showAllMyMarkersEvent",{index: listingIndex}));
+          return true;
+        } else if (title.indexOf(search) >= 0 ){
+          $('body').trigger($.Event("showMyMarkersEvent",{index: listingIndex}));
+          return true;
+        } else{
+          $('body').trigger($.Event("hideMyMarkersEvent",{index: listingIndex}));
+          return false;
+        }
+      };
+    </script>
   </body>
 </html>
