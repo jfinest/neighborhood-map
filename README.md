@@ -61,5 +61,7 @@ Want to have fun or share your neighborhood map with others.
 2. Google APIs from udacity lessons
 3. used stackflow to get general idea on how to use .toUppercase(), .filter()
 4. Used some bootstrap for styling some css like lis.
+5. Knockout documentation from * http://knockoutjs.com/documentation/event-binding.html
+6. Also, * https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282. Helped with calling google map asynchronously.
  
 
