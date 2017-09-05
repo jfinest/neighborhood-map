@@ -3,6 +3,7 @@
  <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Neighborhood Map</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -11,7 +12,7 @@
 
   <body>
     <div class="contain">
-      <div class="well well-sm">
+      <div class="options-box">
 
         <h1>My Neighborhood Map</h1>
         <hr>
@@ -25,19 +26,27 @@
 
         <div>
           <ul class="list-group" data-bind="foreach: listings">
-              <li data-bind="event: {click: $parent.loadArticles}, visible: showHideListings($data.title, $data.index)" data-type="listing" class="list-group-item" >
+              <li data-id="$data.id" data-bind="event: {click: $parent.loadArticles}, visible: showHideListings($data.title, $data.index)" data-type="listing" class="list-group-item" >
                   <span data-bind="text: $data.title"></span>
-                  <span class="hidden" data-type="marker-index" data-bind="text: $data.index"></span>
                   
               </li>
           </ul>
+
+          <ul class="list-group hidden" data-bind="foreach: markers">
+              <li data-bind="event: {click: $parent.activateMarkerClick}" data-type="markers" class="list-group-item">
+              <span class="hidden" data-type="marker-id" data-bind="text: $data.id"></span>
+              </li>
+          </ul>
+
+          
         </div>
 
         <div class="nytimes-container" >
           <h4 id="nytimes-header">New York Times Articles</h4>
+          <span id="noArticles" data-bind="text: noArticles"></span>
           <ul data-bind="foreach: articles">
               <li class="article" data-type="articles" >
-                  <a data-bind="attr: { href: $data.web_url"><span data-bind="text: $data.headline.main"></span></a>
+                  <a data-bind="attr: { href: $data.web_url }"><span data-bind="text: $data.headline.main"></span></a>
               </li>
           </ul>
         </div>
@@ -49,57 +58,14 @@
 <!--Loading the JS Sources -->
     <script src="node_modules/jquery/dist/jquery.js"> </script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"> </script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
     <script src="js/script.js"></script>
     <script src="js/event.js"></script>
+    <script src="js/Model.js"></script>
     <script async
         src=
         "https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyB5nHt7MaXWaKiPWtQ5D2ZAoUvoNlWIEI8&v=3&callback=initMap" onerror="googleApisError()">
     </script>
-    <script src="bower_components/knockout/dist/knockout.js"></script>
-    <script>
-
-      ko.options.deferUpdates = true;
-
-      function MyViewModel() {
-        var self = this;
-        self.listings = ko.observableArray(getLocations());
-        self.articles = ko.observableArray();
-
-        self.loadArticles = function(listing) {
-          loadData(listing.title).done(function(data2) {
-          self.articles(data2);
-          }); 
-        };
-
-        self.searchCriteria = ko.observable("");
-        self.detailsEnabled = ko.observable();
-        show = ko.observable(true);
-                 
-        enableDetails = function() {
-
-        };
-      };
-
-      var myModel = new MyViewModel();
-
-      ko.applyBindings(myModel);
-
-      function showHideListings(listingTitle, listingIndex){
-              
-        var title = listingTitle.trim().toLowerCase();
-        var search = myModel.searchCriteria().trim().toLowerCase();
-
-        if ( search === "" ){
-          $('body').trigger($.Event("showAllMyMarkersEvent",{index: listingIndex}));
-          return true;
-        } else if (title.indexOf(search) >= 0 ){
-          $('body').trigger($.Event("showMyMarkersEvent",{index: listingIndex}));
-          return true;
-        } else{
-          $('body').trigger($.Event("hideMyMarkersEvent",{index: listingIndex}));
-          return false;
-        }
-      };
-    </script>
+    
   </body>
 </html>
