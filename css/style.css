@@ -14,7 +14,7 @@ h1 {
   color: #525454;
   font-size: 22px;
   margin: 0 0 10px 0;
-  text-align: center;
+  text-align: left;
 }
 
 hr {
@@ -32,10 +32,8 @@ hr {
   right: 0px;
 }
 
-
-.well {
-  border: 1px solid #999;
-  border-radius: 3px;
+.options-box {
+  background: #fff;
   height: 100%;
   line-height: 35px;
   padding: 10px 10px 30px 10px;
@@ -70,9 +68,7 @@ li {
 }
 
 .article {
-  list-style-type: none;
-  padding: 10px;
-  border-top: 1px solid #CCC;
   color: black;
+  padding: 10px;
 }
 
