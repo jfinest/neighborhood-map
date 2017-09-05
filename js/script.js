@@ -2,6 +2,7 @@
 var map;
 var markers = [];
 var bounds;
+var deferScript = $.Deferred();
 
 function getMarkers(){
   var markersList = [];
@@ -27,6 +28,12 @@ function getLocations() {
       {index: 10, title: 'Hayfield Secondary School', location: {lat: 38.750166, lng: -77.144265}, id: 'ChIJwx5l3KOtt4kR4d34PxFKJX0'}
       ];
 return locations;
+}
+
+function articleTrigger(marker){
+  $('[data-type="marker-id"]').filter(function() {
+  return $(this).text() === marker.id;
+  }).parent('li').trigger("click");
 }
 
 function createMarkers(locations){
@@ -56,19 +63,16 @@ function createMarkers(locations){
 
     //adding click listener to each marker
     marker.addListener('click', function() {
+      for (var j = 0; j < markers.length; j++){
+        markers[j].setIcon(defaultIcon);
+      }
       if (placeInfoWindow.marker == this) {
         console.log("This infowindow already is on this marker!");
       } else {
         getPlacesDetails(this, placeInfoWindow);
       }
-    });
-
-    marker.addListener('mouseover', function() {
       this.setIcon(highlightedIcon);
-    });
-
-    marker.addListener('mouseout', function() {
-      this.setIcon(defaultIcon);
+      articleTrigger(this);
     });
   }
 }
@@ -93,7 +97,6 @@ function createListings(markers){
 
 //handles error
 function googleApisError(){
-  console.error("Error loading google API script");
   $('body').html('<div class="jumbotron"> Unable to load Google Data. Please try again Later. </div>');
 }
 
@@ -111,6 +114,7 @@ function initMap() {
   bounds = new google.maps.LatLngBounds();
 
   createMarkers(locations);
+  deferScript.resolve(markers);
 }   
 
 function populateInfoWindow(marker, infowindow) {
@@ -154,7 +158,7 @@ function getPlacesDetails(marker, infowindow) {
       // Set the marker property on this infowindow so it isn't created again.
       infowindow.marker = marker;
       var innerHTML = '<div>';
-      innerHTML += '<div>;'
+      innerHTML += '<div>'
       if (place.name) {
         innerHTML += '<strong>' + marker.title + '</strong>';
       }
@@ -203,8 +207,7 @@ function loadData(searchCriteria) {
     articles = articles.slice(0, maxArticles);
     defer.resolve(articles);          
   }).fail(function() {
-    console.log( "error loading nyt articles" );
     defer.resolve(articles);
   });
   return defer;
-};
+}
