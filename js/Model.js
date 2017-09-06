@@ -13,6 +13,7 @@ function MyViewModel(markers) {
 
   self.activateMarkerClick = function(marker) {
     loadData(marker.title).done(function(data2) {
+      self.articles("");
       //If return from JSON is less than 1 or error then show No Articles found to user.
       if (data2.length < 1){
         self.noArticles("No Articles Found");
@@ -22,16 +23,15 @@ function MyViewModel(markers) {
         self.articles(data2);  
         self.noArticles("");  
       }
+    }).fail(function(){
+      self.noArticles("Unable to process request. Please try again later");
     }); 
   };
 
   self.searchCriteria = ko.observable("");
   self.detailsEnabled = ko.observable();
   show = ko.observable(true);
-           
-  enableDetails = function() {
-  };
-}
+ }
 
 function showHideListings(listingTitle, listingIndex){
 
@@ -51,8 +51,7 @@ function showHideListings(listingTitle, listingIndex){
   return false;
   }
 }
-
-      
+ 
 deferScript.done(function(data) {
   ko.options.deferUpdates = true;
   myModel = new MyViewModel(data);
