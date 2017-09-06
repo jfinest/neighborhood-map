@@ -19,7 +19,7 @@
 
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">Filter</span>
-          <input id="filter-places" data-bind="textInput: searchCriteria, event: { input: enableDetails}" type="text" value="" placeholder="Ex: Walmart" >
+          <input id="filter-places" data-bind="textInput: searchCriteria" type="text" value="" placeholder="Ex: Walmart" >
         </div>
 
         <hr>
@@ -30,15 +30,7 @@
                   <span data-bind="text: $data.title"></span>
                   
               </li>
-          </ul>
-
-          <ul class="list-group hidden" data-bind="foreach: markers">
-              <li data-bind="event: {click: $parent.activateMarkerClick}" data-type="markers" class="list-group-item">
-              <span class="hidden" data-type="marker-id" data-bind="text: $data.id"></span>
-              </li>
-          </ul>
-
-          
+          </ul>          
         </div>
 
         <div class="nytimes-container" >
@@ -65,6 +57,5 @@
         src=
         "https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyB5nHt7MaXWaKiPWtQ5D2ZAoUvoNlWIEI8&v=3&callback=initMap" onerror="googleApisError()">
     </script>
-    
   </body>
 </html>
