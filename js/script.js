@@ -30,12 +30,6 @@ function getLocations() {
 return locations;
 }
 
-function articleTrigger(marker){
-  $('[data-type="marker-id"]').filter(function() {
-  return $(this).text() === marker.id;
-  }).parent('li').trigger("click");
-}
-
 function createMarkers(locations){
   var defaultIcon = makeMarkerIcon('ff0000');
   var highlightedIcon = makeMarkerIcon('FFFF24');
@@ -72,7 +66,8 @@ function createMarkers(locations){
         getPlacesDetails(this, placeInfoWindow);
       }
       this.setIcon(highlightedIcon);
-      articleTrigger(this);
+      // articleTrigger(this);
+      myModel.activateMarkerClick(this);
     });
   }
 }
@@ -86,13 +81,6 @@ function makeMarkerIcon(markerColor) {
     new google.maps.Point(10, 34),
     new google.maps.Size(21,34));
   return markerImage;
-}
-
-//create listings
-function createListings(markers){
-  for(var i = 0; i < markers.length; i++){
-    $("#listing").append('<li class="list-group-item" data-marker-index="' +i +'">' + markers[i].title +  '</li>');
-  }
 }
 
 //handles error
@@ -207,7 +195,8 @@ function loadData(searchCriteria) {
     articles = articles.slice(0, maxArticles);
     defer.resolve(articles);          
   }).fail(function() {
-    defer.resolve(articles);
+    console.log("Request failed. Try again later.");
+    defer.reject();
   });
   return defer;
 }
