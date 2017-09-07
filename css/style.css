@@ -14,6 +14,7 @@ h1 {
   color: #525454;
   font-size: 22px;
   margin: 0 0 10px 0;
+  padding: 10px 10px;
   text-align: left;
 }
 
@@ -30,6 +31,24 @@ hr {
   left: 362px;
   position: absolute;
   right: 0px;
+}
+
+@media screen and (max-width: 765px) {
+  .contain {
+    height: 50%;
+    top: 50%;
+    position: relative;
+  }
+  #map {
+    top:50px;
+    height: 50%;
+    width: 100%;
+    left: 0px;
+    position: absolute;
+  }
+  h1{
+    font-size: 20px;
+  }
 }
 
 .options-box {
