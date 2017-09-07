@@ -95,8 +95,8 @@ function initMap() {
   var largeInfowindow = new google.maps.InfoWindow();
 
   map = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: 38.7573595, lng: -77.10},
-  zoom: 13 
+  center: {lat: 38.76, lng: -77.10},
+  zoom: 12 
   });
 
   bounds = new google.maps.LatLngBounds();
