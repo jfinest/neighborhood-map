@@ -1,0 +1,25 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "Using Google Maps to show 11 locations with basic info. And uses NYT API to get articles",
+  "main": "index3.html",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "bootstrap": "^3.3.7",
+    "bower": "^1.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jfinest/neighborhood-map.git"
+  },
+  "author": "Josue Acosta <acostajosued@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jfinest/neighborhood-map/issues"
+  },
+  "homepage": "https://github.com/jfinest/neighborhood-map"
+}
